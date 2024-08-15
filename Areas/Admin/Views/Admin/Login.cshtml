@@ -1,0 +1,95 @@
+﻿@{
+	Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Login</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+
+	<link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css">
+
+	<link rel="stylesheet" type="text/css" href="~/css/login/font-awesome.min.css">
+
+	<link rel="stylesheet" type="text/css" href="~/css/login/material-design-iconic-font.min.css">
+
+	<link rel="stylesheet" type="text/css" href="~/css/login/animate.css">
+
+	<link rel="stylesheet" type="text/css" href="~/css/login/hamburgers.min.css">
+
+	<link rel="stylesheet" type="text/css" href="~/css/login/animsition.min.css">
+
+	<link rel="stylesheet" type="text/css" href="~/css/login/select2.min.css">
+
+	<link rel="stylesheet" type="text/css" href="~/css/login/daterangepicker.css">
+
+	<link rel="stylesheet" type="text/css" href="~/css/login/util.css">
+	<link rel="stylesheet" type="text/css" href="~/css/login/main.css">
+
+	<meta name="robots" content="noindex, follow">
+	<script nonce="fd328d1e-60ba-492d-8247-1fbe1ad9ae97">(function (w, d) { !function (f, g, h, i) { f[h] = f[h] || {}; f[h].executed = []; f.zaraz = { deferred: [], listeners: [] }; f.zaraz.q = []; f.zaraz._f = function (j) { return function () { var k = Array.prototype.slice.call(arguments); f.zaraz.q.push({ m: j, a: k }) } }; for (const l of ["track", "set", "debug"]) f.zaraz[l] = f.zaraz._f(l); f.zaraz.init = () => { var m = g.getElementsByTagName(i)[0], n = g.createElement(i), o = g.getElementsByTagName("title")[0]; o && (f[h].t = g.getElementsByTagName("title")[0].text); f[h].x = Math.random(); f[h].w = f.screen.width; f[h].h = f.screen.height; f[h].j = f.innerHeight; f[h].e = f.innerWidth; f[h].l = f.location.href; f[h].r = g.referrer; f[h].k = f.screen.colorDepth; f[h].n = g.characterSet; f[h].o = (new Date).getTimezoneOffset(); if (f.dataLayer) for (const s of Object.entries(Object.entries(dataLayer).reduce(((t, u) => ({ ...t[1], ...u[1] }))))) zaraz.set(s[0], s[1], { scope: "page" }); f[h].q = []; for (; f.zaraz.q.length;) { const v = f.zaraz.q.shift(); f[h].q.push(v) } n.defer = !0; for (const w of [localStorage, sessionStorage]) Object.keys(w || {}).filter((y => y.startsWith("_zaraz_"))).forEach((x => { try { f[h]["z_" + x.slice(7)] = JSON.parse(w.getItem(x)) } catch { f[h]["z_" + x.slice(7)] = w.getItem(x) } })); n.referrerPolicy = "origin"; n.src = "/cdn-cgi/zaraz/s.js?z=" + btoa(encodeURIComponent(JSON.stringify(f[h]))); m.parentNode.insertBefore(n, m) };["complete", "interactive"].includes(g.readyState) ? zaraz.init() : f.addEventListener("DOMContentLoaded", zaraz.init) }(w, d, "zarazData", "script"); })(window, document);</script>
+</head>
+<body>
+	<div class="container-login100" style="background-image: url('~/image/nyannsuphu.png');">
+		<div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
+<form method="post" action="Login" enctype="multipart/form-data" class="login100-form validate-form">
+	@Html.AntiForgeryToken()
+	<span class="login100-form-title p-b-37">
+		Sign In
+	</span>
+	<div class="wrap-input100 @*validate-input m-b-20*@" data-validate="Enter username or email">
+		<input class="input100" type="text" name="username" placeholder="username">
+		<span class="focus-input100"></span>
+	</div>
+	<br />
+	<div class="wrap-input100 @*validate-input m-b-25*@" data-validate="Enter password">
+		<input class="input100" type="password" name="password" placeholder="password">
+		<span class="focus-input100"></span>
+	</div>
+	<br />
+	<div class="container-login100-form-btn">
+		<button class="login100-form-btn">
+			Sign In
+		</button>
+	</div>
+	<div class="text-center p-t-57 p-b-20">
+		<span class="txt1"></span>
+	</div>
+	<div class="text-center p-t-57 p-b-20">
+		<span class="txt1"></span>
+	</div>
+</form>
+		</div>
+	</div>
+<div id="dropDownSelect1"></div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script src="~/js/login/animsition.min.js"></script>
+
+<script src="/js/login/popper.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script src="/js/login/select2.min.js"></script>
+
+<script src="/js/login/moment.min.js"></script>
+<script src="/js/login/daterangepicker.js"></script>
+
+<script src="/js/login/countdowntime.js"></script>
+
+<script src="/js/login/main.js"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() { dataLayer.push(arguments); }
+	gtag('js', new Date());
+
+	gtag('config', 'UA-23581568-13');
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v52afc6f149f6479b8c77fa569edb01181681764108816" integrity="sha512-jGCTpDpBAYDGNYR5ztKt4BQPGef1P0giN6ZGVUi835kFF88FOmmn8jBQWNgrNd8g/Yu421NdgWhwQoaOPFflDw==" data-cf-beacon='{"rayId":"7baf4e78ad28e63e","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2023.3.0","si":100}' crossorigin="anonymous"></script>
+</body>
+</html>

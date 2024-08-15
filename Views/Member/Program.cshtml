@@ -1,0 +1,297 @@
+﻿@using GiveAID.ModelView;
+@using Newtonsoft.Json;
+@{
+    Layout = null;
+    string Message = (string)TempData["ContactMessage"];
+    List<MV_Topic> topic = (List<MV_Topic>?)TempData["Topic"];
+    Member member = (Member?)TempData["Member"] ?? new Member();
+    MV_Pro_Gal_Top DetailProgram = (MV_Pro_Gal_Top?)TempData["DetailProgram"] ?? new MV_Pro_Gal_Top();
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>GiveAID - Nonprofit Website</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Saira:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="~/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/alert.css">
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <!-- Spinner End -->
+    <!-- Navbar Start -->
+    <div class="ctn container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+        <div class="top-bar text-white-50 row gx-0 align-items-center d-none d-lg-flex">
+            <div class="col-lg-6 px-5 text-start">
+                <small><i class="fa fa-map-marker-alt me-2"></i>123 Street, New York, USA</small>
+                <small class="ms-4"><i class="fa fa-envelope me-2"></i>info@example.com</small>
+            </div>
+            <div class="col-lg-6 px-5 text-end">
+                <small>Follow us:</small>
+                <a class="text-white-50 ms-3" href=""><i class="fab fa-facebook-f"></i></a>
+                <a class="text-white-50 ms-3" href=""><i class="fab fa-twitter"></i></a>
+                <a class="text-white-50 ms-3" href=""><i class="fab fa-linkedin-in"></i></a>
+                <a class="text-white-50 ms-3" href=""><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-expand-lg navbar-dark py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
+            <a href="/Member" class="navbar-brand ms-4 ms-lg-0">
+                <h1 class="fw-bold text-primary m-0">Give<span class="text-white">AID</span></h1>
+            </a>
+            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto p-4 p-lg-0">
+                    <a href="/Member" class="nav-item nav-link active">Home</a>
+                    <a href="/Member/Donate" class="nav-item nav-link">Donate</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Charity Program</a>
+                        <div class="dropdown-menu m-0">
+                            @foreach (var item in topic)
+                            {
+                                <a href="/Member/TopicDetail/?id=@item.id" class="dropdown-item">@item.topic_name</a>
+                            }
+                        </div>
+                    </div>
+                    <a href="/Member/Contact" class="nav-item nav-link">Contact Us</a>
+                    <a href="/Member/About" class="nav-item nav-link">About Us</a>
+                    @if (member != null){
+                        <a href="/Member/Profile" class="nav-item nav-link @ViewData["ActiveProfile"]">Profile</a>
+                    }
+                </div>
+                <div class="d-none d-lg-flex ms-2">
+                    @if (@member.mem_id != 0)   
+                    {
+                        <form asp-controller="Member" asp-action="Logout" method="post">
+                            <button type="submit" class="btn btn-outline-primary py-2 px-3">
+                                Sign Out
+                            </button>
+                        </form>
+                    }else{
+                        <form asp-controller="Member" asp-action="Login" method="post">
+                            <button class="btn btn-outline-primary py-2 px-3">
+                                Sign In
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar End -->
+    
+<div class="alert alert-success alert-z-index" hidden role="alert">
+    @Message
+</div>
+
+    <nav class="breadcrumbs bg-secondary" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Member">Home</a></li>
+            <li class="breadcrumb-item"><a href="/Member">@DetailProgram.topic_name</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@DetailProgram.o_program_name</li>
+        </ol>
+    </nav> 
+
+    <div class="blog">
+        <div class="thumbnail">
+            <img class="rounded" src="/Uploads/@DetailProgram.image_name"> 
+        </div>
+
+        <h3 class="title">@DetailProgram.o_program_name</h3>
+        <div class="meta">
+            <span class="meta-f"><i class="fa fa-calendar" aria-hidden="true"></i>  03 April, 2018</span>
+            <span><i class="fa fa-comments" aria-hidden="true"></i>  100</span>
+        </div>
+        <div class="content">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                ut
+                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu fugiat nulla pariatur.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut
+                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                ut
+                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu fugiat nulla pariatur.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut
+                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                ut
+                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu fugiat nulla pariatur.
+            </p>
+            <blockquote class="blockquote">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut
+                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                ut
+                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu fugiat nulla pariatur.
+            </blockquote>
+        </div>
+        <div class="mt-5">
+            <a href="/Member/Donate/?id=@DetailProgram.id_program" class="btn btn-primary">Donate Now</a>
+        </div>
+        <div class="navigation-btn">
+            <form action="/Member/PreviousPost" method="post">
+                <input name="id_program" type="hidden" value="@DetailProgram.id_program" />
+                <button type="submit" id="Pre-Btn" class="btn btn-primary nav-btn">
+                    <div class="d-inline-flex btn-sm-square bg-white text-primary rounded-circle ms-2">
+                        <i class="fa fa-arrow-left"></i>
+                    </div>
+                    Previous
+                </button>
+            </form>
+            <form action="/Member/NextPost" method="post">
+                <input name="id_program" type="hidden" value="@DetailProgram.id_program" />
+                <button id="Next-Btn" class="btn btn-primary nav-btn">
+                    Next
+                    <div class="d-inline-flex btn-sm-square bg-white text-primary rounded-circle ms-2">
+                        <i class="fa fa-arrow-right"></i>
+                    </div>
+                </button>
+            </form>
+        </div>
+        <div class="cmt-form">
+            <h4 class="cmt-title">If You Have Any Query, Please Contact Us</h4>
+            <form action="/Member/Contact/?program_id=@DetailProgram.id_program" method="post">
+                <div class="row g-3">
+                    @if (member.mem_id != 0)
+                    {
+                        <input name="fullname" value="@member.mem_name" type="hidden">
+                        <input name="phone_number" value="@member.phone_number" type="hidden">
+                        <input name="email" value="@member.email" type="hidden">
+                    }        
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <textarea name="body" required class="form-control" placeholder="Leave a message here" id="message" style="height: 100px"></textarea>
+                            <label for="message">Message</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary py-2 px-3 me-3">Send Message</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Carousel Start -->
+    <!-- Carousel End -->
+    <!-- About Start -->
+    <!-- About End -->
+    <!-- Causes Start -->
+    <!-- Causes End -->
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white-50 footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h1 class="fw-bold text-primary mb-4">Give<span class="text-white">AID</span></h1>
+                    <p>
+                        Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed
+                        stet lorem sit clita
+                    </p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-square me-1" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-square me-1" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-square me-1" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-square me-0" href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Address</h5>
+                    <p><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
+                    <p><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                    <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Our Partners</h5>
+                    <a class="btn btn-link" href="">Aptech</a>
+                    <a class="btn btn-link" href="">Arena</a>
+                    <a class="btn btn-link" href="">HUTECH</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Newsletter</h5>
+                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+                    <div class="position-relative mx-auto" style="max-width: 400px;">
+                        <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text"
+                               placeholder="Your email">
+                        <button type="button"
+                                class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">
+                            SignUp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a href="#">Your Site Name</a>, All Right Reserved.
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        Designed By <a href="#">HTML Codex</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <!-- Template Javascript -->
+    <!-- <script src="js/main.js"></script> -->
+    <script>
+        var message = document.querySelector('textarea[name="body"]');
+        var pre = document.querySelector('#Pre-Btn');
+        var next = document.querySelector('#Next-Btn');
+
+        message.addEventListener("focus", function(e){
+            if (@member.mem_id == 0) {
+                e.preventDefault();
+                window.location = "/Member/Login/?id=@DetailProgram.id_program";
+            } 
+        })
+    </script>
+    <script>
+        var a = "@Message";
+        if (a != "") {
+            document.querySelector(".alert").hidden = false
+        }
+        setTimeout(function () {
+            document.querySelector(".alert").classList.add("animatefadeOut");
+        }, 5000)
+        setTimeout(function () {
+            document.querySelector(".alert").hidden = true
+        }, 6250)
+    </script>
+</body>
+
+</html> 

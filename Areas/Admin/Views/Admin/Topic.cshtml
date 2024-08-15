@@ -1,0 +1,78 @@
+﻿@model List<GiveAID.Models.Topic>
+@{
+    Layout = "../shared/_LayoutAdmin.cshtml";
+}
+
+<section class="section dashboard">
+    <div class="card-body">
+        <h5 class="card-title"></h5>
+        <a href="@Url.Content("~/Admin")@Url.Action("_InsertTopic")" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered1">Insert Topic</a>
+    </div>
+    @Html.Partial("_InsertTopic")
+
+    <table class="table datatable ">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Topic Name</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <th scope="row">@i</th>
+                    <td>@Model[i].topic_name</td>
+                    <td><span class="btn btn-outline-success" id="btnEditTopic" onclick="openEdit(event)" data-value="@Model[i].id">Edit</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="mymodal"></div>
+</section>
+@section myscripts{
+    <script>
+        function openEdit(e) {
+            var current = e.target;
+            var id = $(current).attr("data-value");
+            $.ajax({
+                url: 'ViewEditTopic',
+                datatype: 'html',
+                method: 'get',
+                data:{id},
+                success: function (res) {
+                    $("#mymodal").html(res);
+                    $('#verticalycentered2').modal("toggle");
+                       
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        }
+        $('#create').on("click", function () {
+            $("#insertTopic").validate({
+                onfocusout: false,
+                onkeyup: false,
+                onclick: false,
+                errorClass: 'error',
+                rules: {
+                    "topic_name": {
+                        required: true,
+                        minlength: 5
+                    }
+                },
+                messages: {
+                    "topic_name": {
+                        required: "Please enter the topic title",
+                        minlength: "Please enter more than 5 characters"
+                    },
+
+                }
+            });
+        });
+
+
+    </script>
+}

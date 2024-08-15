@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33502.453
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GiveAID", "GiveAID.csproj", "{20550DB8-758F-4D1D-B61E-C4780DC0CC22}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GiveAID_API", "..\proj_flutter\GiveAID_API\GiveAID_API\GiveAID_API.csproj", "{6CA4B587-CD3E-4C2F-A346-A77131838EC6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20550DB8-758F-4D1D-B61E-C4780DC0CC22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20550DB8-758F-4D1D-B61E-C4780DC0CC22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20550DB8-758F-4D1D-B61E-C4780DC0CC22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20550DB8-758F-4D1D-B61E-C4780DC0CC22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CA4B587-CD3E-4C2F-A346-A77131838EC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CA4B587-CD3E-4C2F-A346-A77131838EC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CA4B587-CD3E-4C2F-A346-A77131838EC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CA4B587-CD3E-4C2F-A346-A77131838EC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14432F12-2A77-4A32-9363-71837805D83E}
+	EndGlobalSection
+EndGlobal

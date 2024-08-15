@@ -1,0 +1,148 @@
+﻿@model GiveAID.Models.RazorPay.RazorPayOrder
+@*@{
+    Layout = null;
+}*@
+<!-- // Click this button automatically when this page load using javascript -->
+<!-- You can hide this button -->
+@{
+    Layout = "_mem_layout";
+    ViewData.Clear();
+    ViewData["ActiveDonate"] = "active";
+    Member member = (Member)@TempData["Member"];
+}
+<!-- Donate Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                <div class="d-inline-block rounded-pill bg-secondary text-primary py-1 px-3 mb-3">Donate Now</div>
+                <h1 class="display-6 mb-5">Thanks For The Results Achieved With You</h1>
+                <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
+            </div>
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                <div class="h-100 bg-secondary p-5">
+                    <form asp-controller="Member" asp-action="Complete" method="post">
+                        @Html.AntiForgeryToken()
+                        <input name="mem_id" type="hidden" id="mem_id" value="@Model.mem_id" />
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="Name" type="text" class="form-control bg-light border-0" value="@member.mem_name" id="name" placeholder="Your Name" required>
+                                    <label for="name">Your Name</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="Email" type="email" class="form-control bg-light border-0" value="@member.email" id="email" placeholder="Your Email" required>
+                                    <label for="email">Your Email</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <select onchange="change()" name="pro_id" class="form-select">
+                                        <option value="" disabled selected>--Please Choose A Program--</option>
+                                        @foreach (Organization_program item in (List<Organization_program>)@TempData["Pro"])
+                                        {
+                                            <option data-now="@item.current" data-target="@item.target" value="@item.id">@item.o_program_name</option>
+                                        }
+                                    </select>
+                                    <input type="hidden" name="CustomValidity" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="Amount" type="number" min="0" class="form-control bg-light border-0" id="btnradio1" placeholder="Amount" required>
+                                    <label id="label" for="btnradio1">Amount (INR)</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn-submit btn btn-primary px-5" style="height: 60px;">
+                                    Donate Now
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Donate End -->
+<script>
+    var pro = document.querySelector("select[name='pro_id']");
+    var amount = document.querySelector("input[name='Amount']");
+    var btn = document.querySelector(".btn-submit");
+    var label = document.querySelector("#label");
+    var pro_id = document.querySelector("#pro_id");
+
+    btn.addEventListener("click", (e) => {
+        if (pro.children[pro.options.selectedIndex].value == "") {
+            e.preventDefault();
+            pro.style.border = "red 1px solid";
+        }
+    })
+    function change() {
+        var now = pro.children[pro.options.selectedIndex].getAttribute("data-now");
+        var target = pro.children[pro.options.selectedIndex].getAttribute("data-target");
+        var need = target - now;
+        label.textContent = "Amount (We Need ₹" + need + ")";
+        amount.setAttribute("max", need);
+    }
+</script>
+<button id="rzp-button1" hidden>Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "@Html.DisplayFor(model => model.RazorPayAPIKey)", // Enter the Key ID generated from the Dashboard
+        "amount": "@Html.DisplayFor(model => model.Amount)", // Amount is in currency subunits.
+        "currency": "@Html.DisplayFor(model => model.Currency)",
+        "name": "@Html.DisplayFor(model => model.Name)",
+        "description": "Sample description here",
+        // "image": "yourLogo_URL", // You can give your logo url
+        "order_id": "@Html.DisplayFor(model => model.OrderId)",
+        "handler": function (response) {
+            // After payment successfully made response will come here
+            // Set the data in hidden form
+            document.getElementById('rzp_paymentid').value = response.razorpay_payment_id;
+            document.getElementById('rzp_orderid').value = response.razorpay_order_id;
+            document.getElementById('mem_id').value = @Model.mem_id;
+            document.getElementById('pro_id').value = @Model.pro_id;
+            // // Let's submit the form automatically
+            document.getElementById('rzp-paymentresponse').click();
+        },
+        "prefill": {
+            "name": "@Html.DisplayFor(model => model.Name)",
+            "email": "@Html.DisplayFor(model => model.Email)",
+            "contact": "9090974785" //pre-filled sample number
+        },
+        "notes": {
+            "address": "You can add notes here"
+        },
+        "theme": {
+            "color": "#F37254"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    //<!-- onload function -->
+    window.onload = function () {
+        document.getElementById('rzp-button1').click();
+    };
+    document.getElementById('rzp-button1').onclick = function (e) {
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
+
+<!-- This form is hidden, and submit when payment successfully made -->
+@using (Html.BeginForm("Complete", "Member", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.Hidden("rzp_paymentid")
+    @Html.Hidden("rzp_orderid")
+    @Html.Hidden("mem_id")
+    @Html.Hidden("pro_id")
+    <input name="mem_id" type="hidden" id="mem_id" value="@Model.mem_id"/>
+    <input name="pro_id" type="hidden" id="pro_id" value="@Model.pro_id"/>
+    <button type="submit" id="rzp-paymentresponse" class="btn btn-primary" hidden>Submit</button>
+}

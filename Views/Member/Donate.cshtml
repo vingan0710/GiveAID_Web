@@ -1,0 +1,102 @@
+﻿@{
+    Layout = "_mem_layout";
+    ViewData.Clear();
+    ViewData["ActiveDonate"] = "active";
+    Member member = (Member?)@TempData["Member"] ?? new Member();
+    int IdChoosePro = (int)TempData["IdChoosePro"];
+}
+<link rel="stylesheet" href="~/css/alert.css">
+<div class="alert alert-success alert-z-index" hidden role="alert">
+    @TempData["Message"]
+</div>
+
+
+<!-- Donate Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                <div class="d-inline-block rounded-pill bg-secondary text-primary py-1 px-3 mb-3">Donate Now</div>
+                <h1 class="display-6 mb-5">Thanks For The Results Achieved With You</h1>
+                <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
+            </div>
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                <div class="h-100 bg-secondary p-5">
+                    <form asp-controller="Member" asp-action="CreateOrder" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" value="@member?.mem_id" name="mem_id" />
+                        <div class="row g-3">
+                            <input name="Name" type="hidden" value="@member.mem_name">
+                            <input name="Email" type="hidden" value="@member.email">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <select onchange="change()" name="pro_id" class="form-select">
+                                        <option value="" disabled selected>--Please Choose A Program--</option>
+                                        @foreach (Organization_program item in (List<Organization_program>)@TempData["Pro"])
+                                        {
+                                            <option data-now="@item.current" data-target="@item.target" value="@item.id">@item.o_program_name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="Amount" type="number" min="0" class="form-control bg-light border-0" id="btnradio1" placeholder="Amount" required>
+                                    <label id="label" for="btnradio1">Amount (INR)</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn-submit btn btn-primary px-5" style="height: 60px;">
+                                    Donate Now
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Donate End -->
+<script>
+    var pro = document.querySelector("select[name='pro_id']");
+    var amount = document.querySelector("input[name='Amount']");
+    var btn = document.querySelector(".btn-submit");
+    var label = document.querySelector("#label");
+
+    btn.addEventListener("click", (e)=>{
+        if (pro.children[pro.options.selectedIndex].value == "") {
+            e.preventDefault();
+            pro.style.border = "red 1px solid";
+        }
+    })
+    if(@IdChoosePro != 0){
+        var options = pro.children;
+        for(var i = 1; i < options.length; i++){
+            if(options[i].value == @IdChoosePro){
+                options[i].selected = "selected";
+                change();
+                break;
+            }
+        }
+    }
+    function change(){
+        var now = pro.children[pro.options.selectedIndex].getAttribute("data-now");
+        var target = pro.children[pro.options.selectedIndex].getAttribute("data-target");
+        var need = target - now;
+        label.textContent = "Amount (We Need ₹" + need + ")";
+        amount.setAttribute("max", need);
+    }
+</script>
+<script>
+    var a = "@TempData["Message"]";
+    if (a != "") {
+        document.querySelector(".alert").hidden = false
+    }
+    setTimeout(function () {
+        document.querySelector(".alert").classList.add("animatefadeOut");
+    }, 5000)
+    setTimeout(function () {
+        document.querySelector(".alert").hidden = true
+    }, 6250)
+</script>

@@ -1,0 +1,32 @@
+﻿@{
+    var idPro = ViewBag.idPro;
+}
+<!-- Disabled Backdrop Modal -->
+<div class="modal fade" id="disablebackdrop2" tabindex="-1" data-bs-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form class="row g-3" method="post" action="NewPayment" id="insertPayment">
+                <div>
+                    <input type="hidden" class="form-control" id="program_id" name="program_id" value="@idPro">
+                    <div class="col-12">
+                        <label for="inputNanme4" class="form-label">Reason</label>
+                        <input type="text" class="form-control" id="description" name="description">
+                    </div>
+                    <div class="col-12">
+                        <label for="inputNanme4" class="form-label">Amount</label>
+                        <input type="text" class="form-control" id="payout" name="payout">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="create">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@model List<GiveAID.Models.ModelView.ContactView>
+@{
+    Layout = "../shared/_LayoutAdmin.cshtml";
+}
+<section class="section dashboard">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Reply Contact</h5>
+            @for (int i= 0; i < @Model.Count; i++)
+            {
+                <form class="row g-3" method="post" action="~/Admin/Admin/SendMail">
+                    <input type="hidden" id="id" name="id" value="@Model[i].id" />
+                    <div class="col-md-6">
+                        <label for="inputName5" class="form-label">Sender email</label>
+                        <input type="text" class="form-control" value="@Model[i].email" disabled>
+                        <input type="hidden" class="form-control" name="email" value="@Model[i].email" >
+
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputName5" class="form-label">Sender's phone</label>
+                        <input type="text" class="form-control" value="@Model[i].phone_number" disabled>
+                    </div>
+                    <div class="col-12">
+                        <label for="inputName5" class="form-label">Description</label>
+                        <div class="form-floating">
+                            
+                            <textarea class="form-control" style="height: 150px" disabled>@Model[i].body</textarea>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="inputName5" class="form-label">Reply</label>
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Reply" style="height: 150px;" name="reply"></textarea>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Reply</button>
+                        <button type="reset" class="btn btn-secondary">Reset</button>
+                    </div>
+                </form>
+
+                <!-- End No Labels Form -->
+            }
+            <!-- No Labels Form -->
+            
+        </div>
+    </div>
+</section>

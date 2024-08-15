@@ -1,0 +1,425 @@
+﻿@using GiveAID.Dao;
+@using GiveAID.ModelView;
+@{
+    Layout = null;
+    ViewData.Clear();
+    ViewData["ActiveProfile"] = "active";
+    string Message = (string)TempData["UpdateProfileMessage"];
+    string Message1 = (string)TempData["UpdateProfileMessage"];
+    Member member = (Member?)TempData["Member"] ?? new Member();
+    List<MV_Topic> topic = (List<MV_Topic>?)TempData["Topic"] ?? new List<MV_Topic>();
+    List<MV_Donate_Pro_Topic> donate = (List<MV_Donate_Pro_Topic>?)TempData["Donate"] ?? new List<MV_Donate_Pro_Topic>();
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>GiveAID - Nonprofit Website</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Saira:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="~/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/profile.css" />
+    <link rel="stylesheet" href="~/css/alert.css">
+</head>
+
+<body>
+    <div class="ctn container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+        <div class="top-bar text-white-50 row gx-0 align-items-center d-none d-lg-flex">
+            <div class="col-lg-6 px-5 text-start">
+                <small><i class="fa fa-map-marker-alt me-2"></i>123 Street, New York, USA</small>
+                <small class="ms-4"><i class="fa fa-envelope me-2"></i>info@example.com</small>
+            </div>
+            <div class="col-lg-6 px-5 text-end">
+                <small>Follow us:</small>
+                <a class="text-white-50 ms-3" href=""><i class="fab fa-facebook-f"></i></a>
+                <a class="text-white-50 ms-3" href=""><i class="fab fa-twitter"></i></a>
+                <a class="text-white-50 ms-3" href=""><i class="fab fa-linkedin-in"></i></a>
+                <a class="text-white-50 ms-3" href=""><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-expand-lg navbar-dark py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
+            <a href="/Member" class="navbar-brand ms-4 ms-lg-0">
+                <h1 class="fw-bold text-primary m-0">Give<span class="text-white">AID</span></h1>
+            </a>
+            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto p-4 p-lg-0">
+                    <a href="/Member" class="nav-item nav-link active">Home</a>
+                    <a href="/Member/Donate" class="nav-item nav-link">Donate</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Charity Program</a>
+                        <div class="dropdown-menu m-0">
+                            @foreach (var item in topic)
+                            {
+                                <a href="/Member/TopicDetail/?id=@item.id" class="dropdown-item">@item.topic_name</a>
+                            }
+                        </div>
+                    </div>
+                    <a href="/Member/Contact" class="nav-item nav-link">Contact Us</a>
+                    @if (member != null)
+                    {
+                        <a href="/Member/Profile" class="nav-item nav-link @ViewData["ActiveProfile"]">Profile</a>
+                    }
+                </div>
+                <div class="d-none d-lg-flex ms-2">
+                    @if (@member.mem_id != 0)
+                    {
+                        <form asp-controller="Member" asp-action="Logout" method="post">
+                            <button type="submit" class="btn btn-outline-primary py-2 px-3">
+                                Sign Out
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-controller="Member" asp-action="Login" method="post">
+                            <button class="btn btn-outline-primary py-2 px-3">
+                                Sign In
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+    <div class="alert alert-success alert-z-index" hidden role="alert">
+        @Message
+    </div>
+
+    <!-- Navbar End -->
+    <div class="container profile">
+        <div class="main-body">
+            <div class="row gutters-sm">
+                <div class="col-md-4">
+                    <div class="card" style="height: 298px;">
+                        <div class="card-body" style="padding-bottom: 2rem">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <img src="~/img/avatar.jpg" alt="Avatar" style="width: 130px; height: 130px; border-radius: 50%;">
+                                <div class="mt-3">
+                                    <h4>@member.mem_name</h4>
+                                    <p class="text-muted font-size-sm">   </p>
+                                    <form action="/Member/Logout" method="post">
+                                        <button type="submit" class="btn btn-outline-primary">Sign Out</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-3" style="height: 292px;">
+                        <form action="/Member/UpdatePassword" method="post" enctype="multipart/form-data">
+                            <input name="mem_id" type="hidden" value="@member.mem_id" />
+                            <ul class="list-group list-group-flush h-100">
+                                <li class="list-group-item d-flex align-items-center flex-wrap h-100">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                    <span style="margin-left: 12px;font-size:20px;">@member.mem_username</span>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center flex-wrap h-100">
+                                    <i class="fa fa-lock" aria-hidden="true"></i>
+                                    <input name="password" id="password" class="form-control password" type="password" placeholder="Password" />
+                                </li>
+                                <li class="list-group-item d-flex align-items-center flex-wrap h-100">
+                                    <i class="fa fa-lock" aria-hidden="true"></i>
+                                    <input id="re_password" class="form-control password" type="password" placeholder="Confirm Password" />
+                                </li>
+                            </ul>
+                            <button id="submit" class="btn btn-primary" type="submit" style="margin: 1em;">Change Password</button>
+                        </form>
+
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Full Name</h6>
+                                </div>
+                                <div class="col-sm-9  ">
+                                    @member.mem_name
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-9  ">
+                                    @member.email
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Phone</h6>
+                                </div>
+                                <div class="col-sm-9  ">
+                                    @member.phone_number
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Created since</h6>
+                                </div>
+                                <div class="col-sm-9  ">
+                                    @member.created_at.ToString("dd MMMM, yyyy")
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-primary" onclick="openForm()">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-popup" id="updateForm" style="display: none;">
+                            <form action="/Member/UpdateProfile" method="post" class="form-container">
+                                <input name="mem_id" type="hidden" value="@member.mem_id" />
+                                <div class="row g-3 p-4">
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input name="mem_name" id="fullname" type="text" class="form-control" placeholder="Fullname" required>
+                                            <label for="fullname">Fullname</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input name="email" id="email" type="text" class="form-control" placeholder="Email" pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                                            <label for="email">Email</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input name="phone_number" id="phone" type="number" class="form-control" placeholder="Phone" required>
+                                            <label for="phone">Phone Number</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-hover mt-4 table-secondary">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Program</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">My Donated</th>
+                        <th scope="col">Raised</th>
+                        <th scope="col">Goal</th>
+                        <th scope="col">Donation_Date</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                    }
+                    @foreach (MV_Donate_Pro_Topic item in donate)
+                    {
+                        i++;
+                        <tr>
+                            <td><span>@i</span></td>
+                            <td>@item.o_program_name</td>
+                            <td>@item.topic_name</td>
+                            <td><span>₹</span>@item.money</td>
+                            <td><span>₹</span>@item.current</td>
+                            <td><span>₹</span>@item.target</td>
+                            <td>@item.donation_date.ToString("dd MMMM, yyyy")</td>
+                            @if (item.current < item.target)
+                            {
+                                <td><a href="/Member/Donate/?id=@item.program_id" class="btn btn-outline-primary">Continue Donate</a></td>
+                            }
+                            else
+                            {
+                                <td><a onclick="openModal(@item.program_id)" class="btn btn-primary">View Detail Payment</a></td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalTitle"></h5>
+                    <button type="button" class="btn" onclick="closeModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Payout</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="show">
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer"> 
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white-50 footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h1 class="fw-bold text-primary mb-4">Give<span class="text-white">AID</span></h1>
+                    <p>
+                        Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed
+                        stet lorem sit clita
+                    </p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-square me-1" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-square me-1" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-square me-1" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-square me-0" href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Address</h5>
+                    <p><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
+                    <p><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                    <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Our Partners</h5>
+                    <a class="btn btn-link" href="">Aptech</a>
+                    <a class="btn btn-link" href="">Arena</a>
+                    <a class="btn btn-link" href="">HUTECH</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Newsletter</h5>
+                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+                    <div class="position-relative mx-auto" style="max-width: 400px;">
+                        <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text"
+                               placeholder="Your email">
+                        <button type="button"
+                                class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">
+                            SignUp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a href="#">Your Site Name</a>, All Right Reserved.
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        Designed By <a href="#">HTML Codex</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <!-- Template Javascript -->
+    <!-- <script src="js/main.js"></script> -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        var password = document.querySelector("#password");
+        var re_password = document.querySelector("#re_password");
+        var btn = document.querySelector("#submit");
+
+        function openForm() {
+            document.getElementById("updateForm").style.display = "block"; 
+        }
+
+        function closeForm() {
+            document.getElementById("updateForm").style.display = "none";
+        }
+        btn.addEventListener("click", function (e) {
+            if (password.value != re_password.value) {
+                e.preventDefault();
+                re_password.setCustomValidity("Confirm Password Is Not Match");
+                re_password.checkValidity();
+            } else {
+                re_password.setCustomValidity("");
+            }
+        })
+    </script>
+    <script>
+        var a = "@Message";
+        if (a != "") {
+            document.querySelector(".alert").hidden = false
+        }
+        setTimeout(function () {
+            document.querySelector(".alert").classList.add("animatefadeOut");
+        }, 5000)
+        setTimeout(function () {
+            document.querySelector(".alert").hidden = true
+        }, 6250)
+    </script>
+    <script>
+        function openModal(id) {
+            $.ajax({
+                    type: 'POST',
+                    url: "/Member/DetailPayment",
+                    data: {id:id},
+                    success: function(response) {
+                        document.querySelector("#show").innerHTML = response
+                    },
+            });
+
+            document.getElementById("Modal").style.display = "block";
+            document.getElementById("ModalTitle").innerText = "thuan";
+        }
+        function closeModal() {
+            document.getElementById("Modal").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>

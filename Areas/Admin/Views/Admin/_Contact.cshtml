@@ -1,0 +1,30 @@
+﻿
+@{
+    var ls = (List<GiveAID.Models.Contact>)ViewBag.cons;
+}
+@if (ls != null)
+{
+    <li class="dropdown-header">
+        You have new notifications
+        <a href="@Url.Content("~/Admin")@Url.Action("Contact" ,"Admin")"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+    </li>
+    
+    @foreach (dynamic item in ls)
+    {
+        
+        <a style="color:black" href="@Url.Content("~/Admin")@Url.Action("ReplyContact" ,new {id=item.id})">
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+        
+        <li class="notification-item">
+            <i class="ri-seedling-fill"></i>
+            <div>
+                <h4>Contact</h4>
+                    <p class="text">@item.body</p>
+                <p>@item.created_at.ToString("dd-MM-yyyy")</p>
+            </div>
+        </li>
+        </a>
+    }    
+}

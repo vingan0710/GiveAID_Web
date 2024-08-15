@@ -1,0 +1,26 @@
+﻿@model GiveAID.Models.RazorPay.PaymentRequest
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@using (Html.BeginForm("CreateOrder", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <label for="name">Customer Name</label>
+        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+    </div>
+    <div class="row">
+        <label for="email">Email ID</label>
+        @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+    </div>
+    <div class="row">
+        <label for="amount">Amount (INR)</label>
+        @Html.TextBoxFor(x => x.Amount, new { @class = "form-control" })
+    </div>
+    <div class="row">
+        <br />
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+}

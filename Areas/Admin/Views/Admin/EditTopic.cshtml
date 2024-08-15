@@ -1,0 +1,29 @@
+﻿
+@{
+    var topic = ViewBag.topic;
+}
+
+<div class="modal fade" id="verticalycentered2" tabindex="-1" data-bs-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Topic</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3" method="post" action="EditTopic">
+                    <input type="hidden" id="id" name="id" value="@topic.id" />
+                    <div class="col-12">
+                        <label for="inputNanme4" class="form-label">Topic Name</label>
+                        <input type="text" class="form-control" id="inputNanme4" name="topic_name" value="@topic.topic_name">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="create">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

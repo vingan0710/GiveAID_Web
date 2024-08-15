@@ -1,0 +1,102 @@
+﻿@using GiveAID.ModelView;
+@using Newtonsoft.Json;
+@{
+    Layout = "_mem_layout";
+    ViewData.Clear();
+    ViewData["ActiveCharPro"] = "active";
+    List<MV_Pro_Gal_Top> programs = (List<MV_Pro_Gal_Top>)TempData["Programs"];
+    //List<Topic> topics = JsonConvert.DeserializeObject<List<Topic>>(TempData["Result"].ToString());
+}
+<!-- About Start -->
+<!-- About End -->
+<!-- Causes Start -->
+<div class="container-xxl bg-light my-5 py-5">
+    <div class="container py-5">
+        <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <a href=""><h3 class="display-6 mb-5">@programs[0].topic_name</h3></a>
+        </div>
+        <div class="row g-4 justify-content-center">
+            @foreach (MV_Pro_Gal_Top item in programs)
+            {
+                <div class="col-lg-4 col-md-6 wow mb-5 fadeInUp" data-wow-delay="0.1s">
+                    @if (item.current == item.target)
+                    {
+                        <div class="causes-item d-flex flex-column bg-white border-top border-5 border-primary rounded-top overflow-hidden h-100">
+                            <div class="text-center p-4 pt-0">
+                                <div class="d-inline-block bg-primary text-white rounded-bottom fs-5 pb-1 px-3 mb-4">
+                                    <small>Completed</small>
+                                </div>
+                                <a href="/Member/Program?id=@item.id_program"><h5 class="mb-3">@item.o_program_name</h5></a>
+                                <p>@item.about_detail</p>
+                                <div class="causes-progress bg-light p-3 pt-2">
+                                    <div class="d-flex justify-content-between">
+                                        <p class="text-dark">₹@item.target <small class="text-body">Goal</small></p>
+                                        <p class="text-dark">₹@item.current <small class="text-body">Raised</small></p>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="@item.current" aria-valuemin="0" aria-valuemax="@item.target">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="position-relative mt-auto wrap-img">
+                                <img class="img-fluid h-100 w-100" src="~/Uploads/@item.image_name" alt="">
+                                <div class="causes-overlay">
+                                    <a class="btn btn-outline-primary py-2 px-3 mb-2" href="/Member/Program?id=@item.id_program">
+                                        Read More
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="causes-item d-flex flex-column bg-white border-top border-5 border-danger rounded-top overflow-hidden h-100">
+                            <div class="text-center p-4 pt-0">
+                                <div class="d-inline-block bg-danger text-white rounded-bottom fs-5 pb-1 px-3 mb-4">
+                                    <small>In Progress</small>
+                                </div>
+                                <a href="/Member/Program?id=@item.id_program"><h5 class="mb-3">@item.o_program_name</h5></a>
+                                <p>@item.about_detail</p>
+                                <div class="causes-progress bg-light p-3 pt-2">
+                                    <div class="d-flex justify-content-between">
+                                        <p class="text-dark">₹@item.target <small class="text-body">Goal</small></p>
+                                        <p class="text-dark">₹@item.current <small class="text-body">Raised</small></p>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="@item.current" aria-valuemin="0" aria-valuemax="@item.target">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="position-relative mt-auto wrap-img">
+                                <img class="img-fluid h-100 w-100" src="~/Uploads/@item.image_name" alt="">
+                                <div class="causes-overlay">
+                                    <a class="btn btn-outline-primary py-2 px-3 mb-2" href="/Member/Program?id=@item.id_program">
+                                        Read More
+                                    </a>
+                                    <a class="btn btn-outline-primary py-2 px-3" href="/Member/Donate/?id=@item.id_program">Donate Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Causes End -->
+<script>
+    var progress_bars = document.querySelectorAll(".progress-bar");
+    progress_bars.forEach(async (progress_bar) => {
+        var now = progress_bar.getAttribute("aria-valuenow");
+        var max = progress_bar.getAttribute("aria-valuemax");
+
+        progress_bar.style.width = now * 100 / max + "%";
+        var span = document.createElement("span");
+        span.className = "span-progress";
+        var text = document.createTextNode(Math.floor(now * 100 / max) + "%");
+        span.appendChild(text);
+        progress_bar.appendChild(span);
+    })
+</script>

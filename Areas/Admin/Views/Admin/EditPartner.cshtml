@@ -1,0 +1,54 @@
+﻿@model GiveAID.Models.Partnership;
+@{
+    Layout = "../shared/_LayoutAdmin.cshtml";
+}
+
+<body>
+    <div class="card-body">
+        <h3 style="text-align:center" class="card-title">Update Partner</h3>
+        <!-- General Form Elements -->
+        <form method="post" action="/Admin/Admin/UpdatePartner?id=@Model.id" enctype="multipart/form-data" style="padding:35px 35px">
+            <div class="row mb-3">
+                <label for="inputText" class="col-sm-2 col-form-label">Name Partner</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="name_part" value="@Model.partner_name">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputNumber" class="col-sm-2 col-form-label">Logo</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="file" accept="image/*" name="myUploads" value="@Model.logo" id="logo">
+                    <div id="preview" class="preview"></div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" style="height: 100px" name="Description" id="Description">@Model.description</textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form><!-- End General Form Elements -->
+    </div>
+</body>
+
+<script>
+    const logo = document.getElementById('logo');
+    const preview = document.getElementById('preview');
+    logo.addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const imageUrl = event.target.result;
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            preview.innerHTML = '';
+            preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+</script>
+
+
+
+

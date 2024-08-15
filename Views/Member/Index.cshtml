@@ -1,0 +1,148 @@
+﻿@using GiveAID.ModelView;
+@using Newtonsoft.Json;
+@{
+    Layout = "_mem_layout";
+    ViewData.Clear();
+    ViewData["ActiveHome"] = "active";
+    MV_Pro_Gal_Top outstanding = (MV_Pro_Gal_Top)TempData["Outstanding"];
+    List<MV_Pro_Gal_Top> programs = (List<MV_Pro_Gal_Top>)TempData["Programs"];
+    List<MV_Topic> topics = JsonConvert.DeserializeObject<List<MV_Topic>>(TempData["Result"].ToString());
+}
+<!-- About Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="position-relative overflow-hidden h-100 causes-item" style="min-height: 400px;">
+                    <div class="position-relative mt-auto h-100">
+                        <img class="img-fluid h-100 w-100" src="~/Uploads/@outstanding.image_name" alt="">
+                        <div class="causes-overlay">
+                            <a class="btn btn-outline-primary py-2 px-3 mb-2" href="/Member/Program?id=@outstanding.id_program">
+                                Read More
+                            </a>
+                            <a class="btn btn-outline-primary py-2 px-3" href="/Member/Donate/?id=@outstanding.id_program">Donate Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="h-100">
+                    <a href="/Member/Program?id=@outstanding.id_program"><h1 class="display-6 mb-5">@outstanding.o_program_name</h1></a>
+                    <div class="bg-light border-bottom border-5 border-primary rounded p-4 mb-4">
+                        <p class="text-dark mb-2">@outstanding.about_detail</p>
+                        <span class="text-primary">Jhon Doe, Founder</span>
+                    </div>
+                    <div class="causes-progress bg-light p-3 pt-2">
+                        <div class="d-flex justify-content-between">
+                            <p class="text-dark">₹@outstanding.target <small class="text-body">Goal</small></p>
+                            <p class="text-dark">₹@outstanding.current <small class="text-body">Raised</small></p>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="@outstanding.current" aria-valuemin="0" aria-valuemax="@outstanding.target">
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-3">@outstanding.created_at.ToString("dd/MM/yyyy")</p>
+                    <a class="btn btn-primary py-2 px-3 me-3" href="/Member/Donate/?id=@outstanding.id_program">Donate Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- About End -->
+<!-- Causes Start -->
+<div class="container-xxl bg-light my-5 py-5">
+    @foreach (MV_Topic topic in topics)
+    {
+        <div class="container py-5">
+            <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                <a href=""><h3 class="display-6 mb-5">@topic.topic_name</h3></a>
+            </div>
+            <div class="row g-4 justify-content-center">
+                @{
+                    List<MV_Pro_Gal_Top> pros = JsonConvert.DeserializeObject<List<MV_Pro_Gal_Top>>(topic.pro_gal);
+                }
+                @foreach (MV_Pro_Gal_Top item in pros)
+                {
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        @if (item.current == item.target)
+                        {
+                            <div class="causes-item d-flex flex-column bg-white border-top border-5 border-primary rounded-top overflow-hidden h-100">
+                                <div class="text-center p-4 pt-0">
+                                    <div class="d-inline-block bg-primary text-white rounded-bottom fs-5 pb-1 px-3 mb-4">
+                                        <small>Completed</small>
+                                    </div>
+                                    <a href="/Member/Program?id=@item.id_program"><h5 class="mb-3">@item.o_program_name</h5></a>
+                                    <p>Aliqu diam amet diam et eos. Clita erat ipsum et lorem sed stet lorem sit clita duo justo erat amet</p>
+                                    <div class="causes-progress bg-light p-3 pt-2">
+                                        <div class="d-flex justify-content-between">
+                                            <p class="text-dark">₹@item.target <small class="text-body">Goal</small></p>
+                                            <p class="text-dark">₹@item.current <small class="text-body">Raised</small></p>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="@item.current" aria-valuemin="0" aria-valuemax="@item.target">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div class="position-relative wrap-img">
+                                    <img class="img-fluid h-100 w-100" src="~/Uploads/@item.image_name" alt="">
+                                    <div class="causes-overlay">
+                                        <a class="btn btn-outline-primary py-2 px-3 mb-2" href="/Member/Program?id=@item.id_program">
+                                            Read More
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }else{
+                            <div class="causes-item d-flex flex-column bg-white border-top border-5 border-danger rounded-top overflow-hidden h-100">
+                                <div class="text-center p-4 pt-0">
+                                    <div class="d-inline-block bg-danger text-white rounded-bottom fs-5 pb-1 px-3 mb-4">
+                                        <small>In Progress</small>
+                                    </div>
+                                    <a href="/Member/Program?id=@item.id_program"><h5 class="mb-3">@item.o_program_name</h5></a>
+                                    <p>Aliqu diam amet diam et eos. Clita erat ipsum et lorem sed stet lorem sit clita duo justo erat amet</p>
+                                    <div class="causes-progress bg-light p-3 pt-2">
+                                        <div class="d-flex justify-content-between">
+                                            <p class="text-dark">₹@item.target <small class="text-body">Goal</small></p>
+                                            <p class="text-dark">₹@item.current <small class="text-body">Raised</small></p>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="@item.current" aria-valuemin="0" aria-valuemax="@item.target">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="position-relative wrap-img">
+                                    <img class="img-fluid h-100 w-100" src="~/Uploads/@item.image_name" alt="">
+                                    <div class="causes-overlay">
+                                        <a class="btn btn-outline-primary py-2 px-3 mb-2" href="/Member/Program?id=@item.id_program">
+                                            Read More
+                                        </a>
+                                        <a class="btn btn-outline-primary py-2 px-3" href="/Member/Donate/?id=@item.id_program">Donate Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+<!-- Causes End -->
+<script>
+    var progress_bars = document.querySelectorAll(".progress-bar");
+    progress_bars.forEach( async (progress_bar) => {
+        var now = progress_bar.getAttribute("aria-valuenow");
+        var max = progress_bar.getAttribute("aria-valuemax");
+
+        progress_bar.style.width = now*100/max + "%";
+        var span = document.createElement("span");
+        span.className = "span-progress";
+        var text = document.createTextNode(Math.floor(now * 100 / max) + "%");
+        span.appendChild(text);
+        progress_bar.appendChild(span);
+    })
+</script>

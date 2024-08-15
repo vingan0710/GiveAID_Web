@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Http
+@model List<GiveAID.Models.Partnership>
+@{
+    Layout = "../shared/_LayoutAdmin.cshtml";
+}
+<a type="button" class="btn btn-outline-primary" href="@Url.Content("~/Admin")@Url.Action("AddPartner","Admin")">Create Partner</a>
+<br />
+<hr />
+<div style="z-index:100;overflow:visible" id="ta">
+   
+    <table class="table">
+        <thead>
+            <tr>  
+                <th scope="col">Logo</th>
+                <th scope="col">NamePartner</th>
+                <th scope="col">Description</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td><img class="img-fluid bg-light  mx-auto mb-4" src="~/Uploads/@Model[i].logo" style="width: 10vw;"></td>
+                    <td>@Model[i].partner_name</td>
+                    <td>@Model[i].description</td>
+                    
+                    <td>
+                        <a type="button" class="btn btn-outline-primary" href="@Url.Content("~/Admin")@Url.Action("EditPartner","Admin")?id=@Model[i].id"><i class="ri-edit-fill"></i> Edit</a>
+                        <a type="button" class="btn btn-outline-danger" href="@Url.Content("~/Admin")@Url.Action("DeletePartner","Admin")?id=@Model[i].id" style="margin-top:0.5vw"><i class="ri-chat-delete-line"></i> Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+

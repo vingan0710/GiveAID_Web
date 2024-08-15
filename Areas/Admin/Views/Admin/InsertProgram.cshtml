@@ -1,0 +1,138 @@
+﻿@model List<GiveAID.Models.Topic>
+@{
+    Layout = "../shared/_LayoutAdmin.cshtml";
+}
+<section class="section dashboard">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Insert Program</h5>
+
+            <form method="post" action="~/Admin/Admin/NewProgram" id="insertProgram">
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Topic</label>
+                    <div class="col-sm-10">
+                        <select class="form-select" aria-label="Default select example" name="topic_id" id="topic_id">
+                            <option value="-1" selected>Choose topic</option>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                <option value="@Model[i].id">@Model[i].topic_name</option>
+                            }
+
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputText" class="col-sm-2 col-form-label">Name of program</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="o_program_name">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Derscription</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" style="height: 200px" name="about_detail"></textarea>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="inputDate" class="col-sm-2 col-form-label">Date start</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control" name="o_program_date">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="inputText" class="col-sm-2 col-form-label">Target</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="target">
+                    </div>
+                </div>
+                <input type="hidden" id="id" name="status" />
+                <div class="row mb-3">
+                    <legend class="col-form-label col-sm-2 pt-0">Article type</legend>
+                    <div class="col-sm-10">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="gridCheck1" name="type">
+                            <label class="form-check-label" for="gridCheck1">
+                                Outstanding
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" id="create">Create</button>
+                    <a class="btn btn-secondary" href="@Url.Content("~/Admin")@Url.Action("Program","Admin")">Return Program List</a>
+                </div>
+            </form><!-- Vertical Form -->
+
+        </div>
+    </div>
+</section>
+
+@section myscripts{
+    <script>
+        $('#create').on("click", function () {
+            $("#insertProgram").validate({
+                onfocusout: false,
+                onkeyup: false,
+                onclick: false,
+                errorClass: 'error',
+                rules: {
+                    "topic_id": {
+                        //required: {
+                        //depends: function (element) {
+                        //    if ($("#topic_id").val()=="-1") {
+                        //        $("#topic_id").focus();
+                        //        $("#topic_id").css({"color":"red"});
+
+                        //    }else{
+                        //        $("#topic_id").css({ "background-color": "transparent" });
+                        //    }
+                        //}
+                        //}
+                        selectcheck: true
+                    },
+                    "o_program_name": {
+                        required: true,
+                        minlength: 5
+                    },
+                    "about_detail": {
+                        required: true,
+                        minlength: 15
+                    },
+                    "o_program_date": {
+                        required: true
+                    },
+                    "target": {
+                        required: true,
+                        number: true,
+                    },
+                },
+                messages: {
+                    "o_program_name": {
+                        required: "Please enter the program title",
+                        minlength: "Please enter more than 5 characters"
+                    },
+                    "about_detail": {
+                        required: "Please fill in the program content",
+                        minlength: "Please enter more than 15 characters"
+                    },
+                    "o_program_date": {
+                        required: "Please choose day start",
+                    },
+                    "target": {
+                        required: "Please enter the target of the program, if there is no target, please enter 0",
+                        number: "Can only enter numbers",
+                    },
+                }
+            });
+            jQuery.validator.addMethod('selectcheck', function (value) {
+                return (value != '-1');
+            }, "Please choose topic");
+        });
+
+
+    </script>
+}

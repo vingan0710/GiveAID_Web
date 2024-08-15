@@ -1,0 +1,165 @@
+﻿@model List<GiveAID.Models.ModelView.ProgramView>
+@{
+    Layout = "../shared/_LayoutAdmin.cshtml";
+}
+
+<section class="section dashboard">
+    <div class="card-body">
+        <h5 class="card-title"></h5>
+        <a href="@Url.Content("~/Admin")@Url.Action("InsertProgram")" class="btn btn-outline-dark">Insert Program</a>
+    </div>
+    <table class="table datatable ">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Topic</th>
+                <th scope="col">Name of program</th>
+                <th scope="col">Program details</th>
+                <th scope="col">Day start</th>
+                <th scope="col">Target</th>
+                <th scope="col">Current</th>
+                <th scope="col">Article type</th>
+                <th scope="col">Status</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody id="tbdata">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <th scope="row">@i</th>
+                    <td>@Model[i].topic_name</td>
+                    @if (Model[i].status == 2)
+                    {
+                        <td><span style="color:#0072a6;" onclick="getPayment(@Model[i].id)">@Model[i].o_program_name</span></td>
+                    }
+                    else
+                    {
+                        <td>@Model[i].o_program_name</td>
+                    }
+                    <td>@Model[i].about_detail</td>
+                    <td>@Model[i].o_program_date.ToString("dd/MM/yyyy")</td>
+                    <td>@Model[i].target</td>
+                    <td>@Model[i].current</td>
+                    @if (Model[i].outstanding == true)
+                    {
+                        <td><a style="color:red">Outstanding</a></td>
+                    }
+                    else
+                    {
+                        <td><a>Normal</a></td>
+                    }
+                    @if (Model[i].status == 0)
+                    {
+                        <td><a style="color:red">Going to be organized</a></td>
+                    }
+                    else if (Model[i].status == 1)
+                    {
+                        <td><a style="color:green">Being organized</a></td>
+                    }
+                    else if (Model[i].status == 2)
+                    {
+                        <td><a style="color:gray">Finished</a></td>
+                    }
+                    else if (Model[i].target == 0)
+                    {
+                        <td><a style="color:gray">Normal post</a></td>
+                    }
+                    @if (Model[i].status == 2)
+                    {
+                        <td><button type="button" class="btn btn-outline-primary" disabled><i class="ri-edit-fill"></i></button></td>
+                    }
+                    else
+                    {
+                        <td><a class="btn btn-outline-primary" href="@Url.Content("~/Admin")@Url.Action("EditProgram", new {id=Model[i].id})"><i class="ri-edit-fill"></i></a></td>
+                    }
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="tbpayment"></div>
+    @Html.Partial("_PaymentView")
+</section>
+
+@section myscripts{
+    <script>
+        $(() => {
+            getProgram();
+            $('#searchtext').on('keyup', () => {
+                getProgram();
+            });
+
+        });
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        })
+        //function getProgram() {
+        //    var search_Val = '*';
+        //    if ($('#searchtext').val().length > 0) {
+        //        search_Val = $('#searchtext').val();
+        //    }
+        //    $.ajax({
+        //        url: 'SearchProgram',
+        //        datatype: 'html',
+        //        method: 'post',
+        //        data: { name: search_Val },
+        //        success: function (res) {
+        //            $('#tbdata').html(res);
+
+        //        },
+        //        error: function (err) {
+        //            console.log(err);
+        //        }
+        //    })
+        //}
+        function getPayment(idp) {
+            $.ajax({
+                url: '_PaymentView',
+                datatype: 'html',
+                method: 'post',
+                data: { idPro: idp },
+                success: function (res) {
+                    $('#tbpayment').html(res);
+
+                    $('#disablebackdrop1').modal("toggle");
+                    $('#create').click(function () {
+                        $("#insertPayment").validate({
+                            onfocusout: false,
+                            onkeyup: false,
+                            onclick: false,
+                            errorClass: 'error',
+                            rules: {
+                                "description": {
+                                    required: true,
+                                    minlength: 5
+                                },
+                                "payout": {
+                                    required: true,
+                                    number: true,
+                                },
+                            },
+                            messages: {
+                                "description": {
+                                    required: "Please fill in the program content",
+                                    minlength: "Please enter more than 5 characters"
+                                },
+                                "payout": {
+                                    required: "Please enter the amount to spend",
+                                    number: "Can only enter numbers",
+                                },
+
+                            }
+                        });
+                    });
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        }
+
+
+
+    </script>
+}

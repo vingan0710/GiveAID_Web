@@ -1,0 +1,30 @@
+﻿@{
+    var program = (GiveAID.Models.ModelView.ProgramView)Model;
+    var gals = GiveAID.Areas.Admin.Data.AdminDao.Instance.GalleryView(program.id);
+}
+<div class="card-body">
+    <h5 class="card-title">@program.o_program_name</h5>
+    <div class="row mb-3">
+        <div style="display:flex; flex-wrap:wrap;">
+            @if (gals != null)
+            {
+                @foreach (var item in gals)
+                {
+                    <div class="block">
+                        <img src="~/Uploads/@item.image_name" data-id="@item.id" class="contain" style="width: 10.5vw; height: 10.5vw; margin-top:0.3vw; margin-right:0.5vw">
+                        <a class="icon" href="@Url.Content("~/Admin")@Url.Action("DeleteGallery", new{id=item.id})"><img class="block img" src="~/Admin/img/bin.png"></img></a>
+                    </div>
+                }
+                <div class="image-upload">
+                    <input type="file" id="fu" />
+                    <input type="hidden" id="pid" value="@program.id" />
+                    <button onclick="openUpload(event)" class="cover object" id="check">
+                        <img src="~/Admin/img/Add Images.png" id="btnAddImage" class="contain" style="width: 10vw; height: 10vw" />
+                    </button>
+
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

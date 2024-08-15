@@ -1,0 +1,52 @@
+﻿@{
+    Layout = "../shared/_LayoutAdmin.cshtml";
+    var pros = (List<GiveAID.Models.ModelView.ProgramView>)ViewBag.pros;
+}
+
+<section class="section dashboard">
+    @if (pros != null)
+    {
+        @foreach (GiveAID.Models.ModelView.ProgramView item in pros)
+        {
+
+            <div class="card">
+                @Html.Partial("_image",item)
+
+            </div>
+        }
+    }
+
+</section>
+
+@section myscripts{
+    <script>
+        function openUpload(event) {
+            event.preventDefault();
+            let item = event.target;
+            let parent=$(item).parents("div.image-upload");
+            let program_id = $(parent).find("#pid").val();
+            let inputfile = document.createElement("input");
+            inputfile.type = "file";
+            $(inputfile).trigger("click");
+            var data = new FormData();
+            data.append("pid", program_id);
+            $(inputfile).change(function () {                
+                data.append("formfile", $(this)[0].files[0]);
+                console.log(data);
+                $.ajax({
+                    url: 'InsertGallery',
+                    method: 'post',
+                    data: data, // In the controller it receives IFormFile image
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                        if(res=="success"){
+                            location.reload();
+                        }
+                    }
+                })
+            });
+        }
+        
+    </script>
+}
